@@ -6,6 +6,23 @@ require_once 'functions.php';
 
 $allImages = getAllImage();
 
+if (isset($_POST['action']) && $_POST['action'] == 'addImage') {
+    $image['name'] = $_FILES['image']['name'];
+    $image['type'] = $_FILES['image']['type'];
+    $image['tmp_name'] = $_FILES['image']['tmp_name'];
+    $image['error'] = $_FILES['image']['error'];
+
+    if ($image['type'] == 'image/jpeg' || $image['type'] == 'image/gif' || $image['type'] == 'image/png') {
+        if (addImage($image)) {
+            $_SESSION['message'] = '<p style="color: green">Картинка загружена</p>';
+            header('Location: index.php');
+            die;
+        }
+    } else {
+        $_SESSION['message'] = '<p style="color: red">Неправильный формат</p>';
+    }
+}
+
 if (isset($_GET['delImage'])) {
     $id = intval($_GET['delImage']);
     $name = $_GET['name'];
